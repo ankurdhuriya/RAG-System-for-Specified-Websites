@@ -2,12 +2,15 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 
 from app.api.models import ChatRequest, ChatResponse, IndexRequest, IndexResponse
+from app.utils.log_config import logger
 
 router = APIRouter()
 
 
 @router.post("/index", response_model=IndexResponse)
-async def index_endpoint(app_request: Request, request_model: IndexRequest) -> JSONResponse:
+async def index_endpoint(
+    app_request: Request, request_model: IndexRequest
+) -> JSONResponse:
     """
     Indexes the provided URLs.
 
@@ -16,31 +19,37 @@ async def index_endpoint(app_request: Request, request_model: IndexRequest) -> J
     including a list of successfully indexed URLs and any URLs that failed to be indexed.
 
     Args:
-        request: An IndexRequest object containing the list of URLs to be indexed.
+        app_request: The FastAPI request object.
+        request_model: An IndexRequest object containing the list of URLs to be indexed.
 
     Returns:
         A JSONResponse object with the indexing status and details.
     """
-    try:
-        # TODO: Implement the logic for indexing URLs and their content here
-        # This placeholder logic just returns example data for demonstration purposes.
-        indexed_url, failed = ["https://example.com"], None
 
-        app_request.app.state.url_content_indexer.index_urls(request_model.url)
+    try:
+        indexed_url, failed_url = await app_request.app.state.url_content_indexer.index_urls(
+            request_model.url
+        )
+
+        logger.info(f"Indexed URLs: {indexed_url}")
+        logger.warning(f"Failed URLs: {failed_url}")  # Log failed URLs as warnings
 
         return JSONResponse(
             {
-                "status": "success",
+                "status": "success" if indexed_url else "failed",
                 "indexed_url": indexed_url,
-                "failed_url": failed,
+                "failed_url": failed_url,
             }
         )
     except Exception as e:
+        logger.error(f"Error during indexing: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/chat", response_model=ChatResponse)
-async def chat_endpoint(app_request: Request, request_model: ChatRequest) -> JSONResponse:
+async def chat_endpoint(
+    app_request: Request, request_model: ChatRequest
+) -> JSONResponse:
     """
     Processes a chat request and generates a response.
 
@@ -49,11 +58,13 @@ async def chat_endpoint(app_request: Request, request_model: ChatRequest) -> JSO
     answers and their corresponding citations.
 
     Args:
-        request: A ChatRequest object containing the list of messages in the chat.
+        app_request: The FastAPI request object.
+        request_model: A ChatRequest object containing the list of messages in the chat.
 
     Returns:
         A JSONResponse object with the generated responses and citations.
     """
+
     try:
         # TODO: Implement the logic to generate a response based on the messages here
         # This placeholder logic just returns example data for demonstration purposes.
@@ -74,4 +85,5 @@ async def chat_endpoint(app_request: Request, request_model: ChatRequest) -> JSO
             }
         )
     except Exception as e:
+        logger.error(f"Error during chat processing: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

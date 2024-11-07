@@ -50,7 +50,7 @@ class URLContentIndexer:
         )
         self.llm = ChatGroq(model=settings.LLM, temperature=0, max_retries=3)
 
-    def index_urls(self, urls: list[str]):
+    async def index_urls(self, urls: list[str]):
         """Indexes the given URLs into the vector store.
 
         Args:
@@ -86,6 +86,8 @@ class URLContentIndexer:
 
         if failed_url:
             logger.warning(f"Failed to index the following URLs: {failed_url}")
+        
+        return (indexed_url, failed_url)
 
     @staticmethod
     def get_unique_id(index, url):
