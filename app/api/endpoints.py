@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 
 from app.api.models import ChatRequest, ChatResponse, IndexRequest, IndexResponse
@@ -7,7 +7,7 @@ router = APIRouter()
 
 
 @router.post("/index", response_model=IndexResponse)
-async def index_endpoint(request: IndexRequest) -> JSONResponse:
+async def index_endpoint(app_request: Request, request_model: IndexRequest) -> JSONResponse:
     """
     Indexes the provided URLs.
 
@@ -26,6 +26,8 @@ async def index_endpoint(request: IndexRequest) -> JSONResponse:
         # This placeholder logic just returns example data for demonstration purposes.
         indexed_url, failed = ["https://example.com"], None
 
+        app_request.app.state.url_content_indexer.index_urls(request_model.url)
+
         return JSONResponse(
             {
                 "status": "success",
@@ -38,7 +40,7 @@ async def index_endpoint(request: IndexRequest) -> JSONResponse:
 
 
 @router.post("/chat", response_model=ChatResponse)
-async def chat_endpoint(request: ChatRequest) -> JSONResponse:
+async def chat_endpoint(app_request: Request, request_model: ChatRequest) -> JSONResponse:
     """
     Processes a chat request and generates a response.
 
