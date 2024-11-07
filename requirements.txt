@@ -1,6 +1,6 @@
-fastapi==0.115.4
-uvicorn==0.32.0
-pydantic==1.10.11
+fastapi
+uvicorn
+pydantic
 langchain==0.3.7
 langchain-community==0.3.5
 langchain-core==0.3.15
