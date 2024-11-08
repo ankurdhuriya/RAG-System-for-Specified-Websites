@@ -5,7 +5,6 @@ from urllib.parse import urlparse
 
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.document_loaders import UnstructuredURLLoader
-from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from pinecone import Pinecone, ServerlessSpec
@@ -48,7 +47,6 @@ class URLContentIndexer:
         self.vectorstore = PineconeVectorStore(
             index_name=settings.VECTOR_DB_INDEX, embedding=self.embedding
         )
-        self.llm = ChatGroq(model=settings.LLM, temperature=0, max_retries=3)
 
     async def index_urls(self, urls: list[str]):
         """Indexes the given URLs into the vector store.

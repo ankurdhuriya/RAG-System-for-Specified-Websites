@@ -27,12 +27,20 @@ async def index_endpoint(
     """
 
     try:
-        indexed_url, failed_url = await app_request.app.state.url_content_indexer.index_urls(
+        logger.info(f"Request Body: {request_model.dict()}")
+        (
+            indexed_url,
+            failed_url,
+        ) = await app_request.app.state.url_content_indexer.index_urls(
             request_model.url
         )
 
         logger.info(f"Indexed URLs: {indexed_url}")
         logger.warning(f"Failed URLs: {failed_url}")  # Log failed URLs as warnings
+
+        logger.info(
+            f"Response: {({'status': 'success' if indexed_url else 'failed', 'indexed_url': indexed_url, 'failed_url': failed_url})}"
+        )
 
         return JSONResponse(
             {
@@ -66,20 +74,21 @@ async def chat_endpoint(
     """
 
     try:
-        # TODO: Implement the logic to generate a response based on the messages here
-        # This placeholder logic just returns example data for demonstration purposes.
+        logger.info(f"Request Body: {request_model.dict()}")
+        answer_content, citations = await app_request.app.state.chat.generate_response(
+            request_model.dict().get("messages")
+        )
 
-        answer_content = "This is a placeholder answer."  # Replace with actual logic
-        citation_links = [
-            "https://example.com/citation"
-        ]  # Replace with actual citations
+        logger.info(
+            f"Response: {({'response': [{'answer': {'content': answer_content, 'role': 'assistant'}, 'citation': list(citations)}]})}"
+        )
 
         return JSONResponse(
             {
                 "response": [
                     {
                         "answer": {"content": answer_content, "role": "assistant"},
-                        "citation": citation_links,
+                        "citation": list(citations),
                     }
                 ]
             }

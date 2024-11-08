@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from app.indexing import URLContentIndexer
+from app.chat import Chat
 from app.api.endpoints import router as api_router
 from app.utils.log_config import logger, setup_logging
 
@@ -17,6 +18,9 @@ async def lifespan(app: FastAPI):
     
     # Initialize URLContentIndexer and store it in the application's state
     app.state.url_content_indexer = URLContentIndexer()
+
+    # Initialize Chat and store it in the application's state
+    app.state.chat = Chat()
     
     yield  # This yields control back to FastAPI during the lifespan of the app
 
