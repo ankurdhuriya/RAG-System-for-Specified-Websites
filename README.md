@@ -22,6 +22,14 @@ To run this project, you need to have Python version **3.9** installed. You can 
 
 ## API Endpoints
 
+You would require an api key for authentication
+
+```bash
+  {
+    'x-api-key: sample_api_key'
+  }
+```
+
 *POST `api/v1/index`*
 
 *INPUT*
