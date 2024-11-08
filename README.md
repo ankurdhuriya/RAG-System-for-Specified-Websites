@@ -26,57 +26,58 @@ To run this project, you need to have Python version **3.9** installed. You can 
 
 *INPUT*
 ```json
-{
-    "url": [
-        "https://lilianweng.github.io/posts/2023-01-27-the-transformer-family-v2/",
-        ...
-         // url need to by httpurl format not any string
-    ]
-}
+  {
+      "url": [
+          "https://lilianweng.github.io/posts/2023-01-27-the-transformer-family-v2/",
+          ...
+          // url need to by httpurl format not any string
+      ]
+  }
 ```
 
 *OUTPUT*
 ```json
-{
-    "status": "success",
-    "indexed_url": [
-        "https://lilianweng.github.io/posts/2023-01-27-the-transformer-family-v2".
-        ... 
-    ],
-    "failed_url": []
-}
+  {
+      "status": "success",
+      "indexed_url": [
+          "https://lilianweng.github.io/posts/2023-01-27-the-transformer-family-v2".
+          ... 
+      ],
+      "failed_url": []
+  }
 ```
 
 *POST `api/v1/chat`*
 
 *INPUT* 
 ```json
-{
-  "messages": [
-    {
-      "content": "Hello, how are you?",
-      "role": "user" //role could be user or assistant only
-    },
-    {
-      "content": "I'm doing well, thank you. How can I help you today?",
-      "role": "assistant"
-    },
-    ....
-  ]
-}
+  {
+    "messages": [
+      {
+        "content": "Hello, how are you?",
+        "role": "user" //role could be user or assistant only
+      },
+      {
+        "content": "I'm doing well, thank you. How can I help you today?",
+        "role": "assistant"
+      },
+      ....
+    ]
+  }
+```
 
 *OUTPUT*
 
 ```json
-{
-    "responses": [
-      "answer": {
-         "content": "",
-         "role": "" // assistant
-      },
-      "citations": [], // list of urls
-    ]
-}
+  {
+      "responses": [
+        "answer": {
+          "content": "",
+          "role": "" // assistant
+        },
+        "citations": [], // list of urls
+      ]
+  }
 ```
 
 ## Deployment Overview
