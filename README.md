@@ -26,11 +26,24 @@ You would require an api key for authentication
 
 ```bash
   {
-    'x-api-key: sample_api_key'
+    'x-api-key': 'sample_api_key'
   }
 ```
 
 *POST `api/v1/index`*
+
+example usage : -
+
+```bash
+curl --location 'http://127.0.0.1:8000/api/v1/index' \
+--header 'x-api-key: sample_api_key' \
+--header 'Content-Type: application/json' \
+--data '{
+    "url": [
+        "https://lilianweng.github.io/posts/2023-01-27-the-transformer-family-v2/"
+    ]
+}'
+```
 
 *INPUT*
 ```json
@@ -56,6 +69,23 @@ You would require an api key for authentication
 ```
 
 *POST `api/v1/chat`*
+
+example usage : -
+
+```bash
+curl --location 'http://127.0.0.1:8000/api/v1/chat' \
+--header 'x-api-key: sample_api_key' \
+--header 'Content-Type: application/json' \
+--data '{
+    "messages": [
+        {
+            "role": "user",
+            "content": "explain hallucinations in Large Language Models?"
+        }
+    ]
+}'
+```
+
 
 *INPUT* 
 ```json
